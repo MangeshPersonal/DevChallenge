@@ -7,12 +7,12 @@ using TODO.MODELS.ResponseModel;
 namespace TODO.API
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class ExceptionMiddleWare
+    public class CustomExceptionMiddleWare
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public ExceptionMiddleWare(RequestDelegate next,ILogger ilogger)
+        public CustomExceptionMiddleWare(RequestDelegate next,ILogger ilogger)
         {
             _next = next;
             _logger = ilogger;
@@ -45,9 +45,9 @@ namespace TODO.API
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class ExceptionMiddleWareExtensions
     {
-        public static IApplicationBuilder UseExceptionMiddleWare(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseCutomExceptionMiddleWare(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<ExceptionMiddleWare>();
+            return builder.UseMiddleware<CustomExceptionMiddleWare>();
         }
     }
 }

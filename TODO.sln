@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TODO.LOGGER", "TODO.LOGGER\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TODO.REPOSITORY", "TODO.REPOSITORY\TODO.REPOSITORY.csproj", "{9874F332-E8F7-426A-90B4-CBB3A4DE5294}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TODO.TEST", "TODO.TEST\TODO.TEST.csproj", "{9A3F93CE-0AB3-4E83-BCDD-67AD73D6D5DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9874F332-E8F7-426A-90B4-CBB3A4DE5294}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9874F332-E8F7-426A-90B4-CBB3A4DE5294}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9874F332-E8F7-426A-90B4-CBB3A4DE5294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A3F93CE-0AB3-4E83-BCDD-67AD73D6D5DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A3F93CE-0AB3-4E83-BCDD-67AD73D6D5DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A3F93CE-0AB3-4E83-BCDD-67AD73D6D5DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A3F93CE-0AB3-4E83-BCDD-67AD73D6D5DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

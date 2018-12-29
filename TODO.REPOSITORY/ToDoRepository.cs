@@ -5,7 +5,7 @@ using TODO.MODELS.DataModels;
 using TODO.MODELS.REPOSITORY;
 using System.Linq;
 using TODO.MODELS.PaginationModel;
-
+using TODO.MODELS.APIModel;
 namespace TODO.REPOSITORY
 {
     public class ToDoRepository : IToDoRespository<ToDoDataModel>
@@ -23,12 +23,16 @@ namespace TODO.REPOSITORY
         /// </summary>
         /// <param name="entity">ToDo Item </param>
         /// <returns></returns>
-        public int Add(ToDoDataModel entity)
+        public ToDoDataModel Add(ToDoDataModel entity)
         {
+
             _ctx.ToDo.Add(entity);
             int result = _ctx.SaveChanges();
-            return entity.ID;
+            return entity;
         }
+
+
+
         /// <summary>
         /// Deletes the Item From the Database
         /// </summary>
@@ -56,11 +60,12 @@ namespace TODO.REPOSITORY
         /// <returns></returns>
         public ToDoDataModel FindById(int Id)
         {
-            var todoitem = (from t in _ctx.ToDo
-                            where t.ID == Id
-                            select t).FirstOrDefault();
+            var todoitem = _ctx.ToDo.FirstOrDefault(a => a.ID == Id);
+
             return todoitem;
         }
+
+
 
         /// <summary>
         /// 
@@ -69,11 +74,12 @@ namespace TODO.REPOSITORY
         /// <returns></returns>
         public IEnumerable<ToDoDataModel> list(Paging paging)
         {
-            int Count = _ctx.ToDo.Count();
+            var alltodolist = GetAll().OrderByDescending(p=>p.CreatedOn);
+            int Count = alltodolist.Count();
             int CurrentPage = paging.pageNumber;
             int PageSize = paging.pageSize;
             int TotalPages = (int)Math.Ceiling(Count / (double)PageSize);
-            var todolist = _ctx.ToDo.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var todolist = alltodolist.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             return todolist;
         }
 
@@ -86,12 +92,22 @@ namespace TODO.REPOSITORY
                 itemtoupdate.Description = entity.Description;
                 itemtoupdate.Title = entity.Title;
                 itemtoupdate.Status = entity.Status;
-                itemtoupdate.ModifiedOn = DateTime.Now;
-
                 _ctx.ToDo.Update(itemtoupdate);
                 result = _ctx.SaveChanges();
+
             }
+
             return result > 0;
+        }
+
+        public IEnumerable<ToDoDataModel> GetAll()
+        {
+            return _ctx.ToDo.ToList();
+        }
+
+        public int GetCount()
+        {
+            return _ctx.ToDo.Count();
         }
     }
 }

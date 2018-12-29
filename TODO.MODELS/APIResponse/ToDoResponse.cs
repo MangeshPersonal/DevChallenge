@@ -12,11 +12,14 @@
 
         public object Data { get; set; }
 
-        public ToDoResponse(int statusCode, object result = null, string errorMessage = null)
+        public int DataCount { get; set; }
+
+        public ToDoResponse(int statusCode, object result = null, string errorMessage = null,int _DataCount=0)
         {
             StatusCode = (int)statusCode;
             Data = result;
             ErrorMessage = errorMessage;
+            DataCount = _DataCount;
         }
     }
 }

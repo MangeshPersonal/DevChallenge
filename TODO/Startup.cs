@@ -42,7 +42,7 @@ namespace TODO.API
                         {
                             Name = e.Key,
                             Description = e.Value.Errors.First().ErrorMessage
-                        }).ToArray();
+                        }).ToList();
 
                     return new BadRequestObjectResult(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.BadRequest, result: errors, errorMessage: "Bad Request"));
                 };
@@ -54,25 +54,36 @@ namespace TODO.API
             //Adding Swagger services
             services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info()
             {
-                Version="1.0",Title="ToDo API",Description="ToDo Description"
+                Version="2.0",Title="ToDo API",Description="ToDo Description"
                 
             }));
 
             // Adding Logger services
             services.AddSingleton<ILogger, ExceptionLogger>();
 
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ToDoAPIPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            ////}
+            ///
+            app.UseCors("ToDoAPIPolicy");
+            app.UseCutomExceptionMiddleWare();
             app.UseMvc();
-            app.UseExceptionMiddleWare();
+            
             app.UseSwagger();
             app.UseSwaggerUI(opt =>
             {
@@ -80,7 +91,7 @@ namespace TODO.API
             });
 
             // Global Exception Handler.
-           // app.UseExceptionMiddleWare();
+           
         }
     }
 }
