@@ -6,6 +6,8 @@ using Xunit;
 using TODO.MODELS.DataModels;
 using TODO.MODELS.ResponseModel;
 using Microsoft.AspNetCore.Mvc;
+using TODO.LOGIC;
+
 namespace TODO.TEST
 {
     public class AddUpdateTest
@@ -13,11 +15,14 @@ namespace TODO.TEST
 
         private readonly ToDoController todotestcotroller;
         private readonly ToDoTestService todoservice;
+        private readonly ToDoDataLogic todobuisnesslogic;
+
 
         public AddUpdateTest()
         {
             todoservice = new ToDoTestService();
-            todotestcotroller = new ToDoController(todoservice, null);
+            todobuisnesslogic = new TODO.LOGIC.ToDoDataLogic(todoservice, null);
+            todotestcotroller = new ToDoController(null,todobuisnesslogic);
         }
 
         [Fact]

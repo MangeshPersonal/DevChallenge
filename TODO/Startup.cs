@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using TODO.LOGGER;
+using TODO.LOGIC;
 using TODO.MODELS.APIResponse;
 using TODO.MODELS.ResponseModel;
 using TODO.REPOSITORY;
@@ -50,6 +51,8 @@ namespace TODO.API
 
             //Adding Repository
             services.AddScoped<TODO.MODELS.REPOSITORY.IToDoRespository<MODELS.DataModels.ToDoDataModel>, TODO.REPOSITORY.ToDoRepository>();
+            //Adding Buisness Logic 
+            services.AddScoped<TODO.MODELS.Contracts.IBusinessLogic, ToDoDataLogic>();
 
             //Adding Swagger services
             services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info()

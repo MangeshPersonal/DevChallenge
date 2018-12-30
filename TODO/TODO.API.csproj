@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\SampleController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
 
@@ -25,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TODO.LOGIC\TODO.LOGIC.csproj" />
     <ProjectReference Include="..\TODO.REPOSITORY\TODO.REPOSITORY.csproj" />
   </ItemGroup>
 

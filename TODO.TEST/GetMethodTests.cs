@@ -4,6 +4,7 @@ using TODO.API.Controllers;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using TODO.MODELS.ResponseModel;
+using TODO.LOGIC;
 
 namespace TODO.TEST
 {
@@ -12,13 +13,13 @@ namespace TODO.TEST
 
         private readonly ToDoController todotestcotroller;
         private readonly ToDoTestService todoservice;
+        private readonly ToDoDataLogic todobuisnesslogic;
 
         public GetMethodTests()
         {
             todoservice = new ToDoTestService();
-            todotestcotroller = new ToDoController(todoservice, null);
-
-
+            todobuisnesslogic = new TODO.LOGIC.ToDoDataLogic(todoservice,null);
+            todotestcotroller = new ToDoController(null, todobuisnesslogic);
         }
 
         [Fact]

@@ -7,6 +7,7 @@ using TODO.MODELS.APIModel;
 using TODO.MODELS.ResponseModel;
 using TODO.MODELS.PaginationModel;
 using System.Web.Http;
+using TODO.MODELS.Contracts;
 
 namespace TODO.API.Controllers
 {
@@ -16,90 +17,78 @@ namespace TODO.API.Controllers
     {
 
         private readonly ILogger _loggerservice;
-        private readonly IToDoRespository<ToDoDataModel> _todorepo;
-        ///// <summary>
-        ///// constructor for the Unit Testing
-        ///// </summary>
-        ///// <param name="todorepo"></param>
-        //public ToDoController(IToDoRespository<ToDoDataModel> todorepo)
-        //{
-        //    _todorepo = todorepo;
-        //}
+        private readonly IBusinessLogic _buisnesslogic;
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="todorepo"></param>
         /// <param name="loggerservice"></param>
-        public ToDoController(IToDoRespository<ToDoDataModel> todorepo, ILogger loggerservice)
+        public ToDoController(ILogger loggerservice, IBusinessLogic logic)
         {
-            _todorepo = todorepo;
             _loggerservice = loggerservice;
+            _buisnesslogic = logic;
         }
 
         [HttpGet]
         [Route("GetAll")]
         public ActionResult GetAll([FromQuery]Paging paging)
         {
-            int DataCount = _todorepo.GetCount();
-            return Ok(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.OK, result: _todorepo.list(paging), errorMessage: "",_DataCount:DataCount));
+
+            var objresponse = _buisnesslogic.GetAll(paging);
+            return SetResponse(objresponse);
         }
 
         [HttpGet]
         public ActionResult Get([FromQuery]int id)
         {
-            
-            var itemtofind = _todorepo.FindById(id);
-            if (itemtofind != null)
-                return Ok(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.OK, result: itemtofind, errorMessage: ""));
-            else
-                return NotFound(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.NotFound, result: null, errorMessage: "Not Found"));
-
+            var objresponse = _buisnesslogic.Get(id);
+            return SetResponse(objresponse);
         }
 
 
         [HttpPost]
         public ActionResult Create([FromBody]ToDoDataModel todoitem)
         {
-            if (ModelState.IsValid)
-            {
-                _todorepo.Add(todoitem);
-                if (todoitem.ID > 0)
-                {
-
-                    return Ok(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.OK, result: todoitem, errorMessage: ""));
-                }
-               
-            }
-            return BadRequest(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.BadRequest, result: todoitem, errorMessage: "Error While Adding"));
-            
+            var objresponse = _buisnesslogic.Create(todoitem);
+            return SetResponse(objresponse);
         }
 
         [HttpPut]
         public ActionResult Update([FromQuery] int id, [FromBody] ToDoDataModel todoitem)
         {
-            if (_todorepo.Update(id, todoitem))
-            {
-                return Ok(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.OK, result: todoitem, errorMessage: ""));
-            }
-            else
-            {
-                return NotFound(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.NotFound, result: null, errorMessage: "Update Unsuccessfull !!"));
-            }
-        }
+            var objresponse = _buisnesslogic.Update(id, todoitem);
+            return SetResponse(objresponse);
 
+        }
         [HttpDelete]
         public ActionResult Delete([FromQuery] int Id)
         {
-            if (_todorepo.Delete(Id))
-            {
-                return Ok(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.OK, result: null, errorMessage: ""));
-            }
-            else
-            {
-                return NotFound(new ToDoResponse(statusCode: (int)System.Net.HttpStatusCode.NotFound, result: null, errorMessage: "Item Cannot be deleted !"));
-            }
+            var objresponse = _buisnesslogic.Delete(Id);
+            return SetResponse(objresponse);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objresponse"></param>
+        /// <returns></returns>
+        private ActionResult SetResponse(ToDoResponse objresponse)
+        {
 
+            switch (objresponse.StatusCode)
+            {
+                case (int)System.Net.HttpStatusCode.OK:
+                    return Ok(objresponse);
+                case (int)System.Net.HttpStatusCode.BadRequest:
+                    return BadRequest(objresponse);
+                case (int)System.Net.HttpStatusCode.NotFound:
+                    return NotFound(objresponse);
+                default:
+                    return BadRequest(objresponse);
+            }
+
+        }
     }
+
 }

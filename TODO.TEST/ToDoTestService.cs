@@ -52,6 +52,11 @@ namespace TODO.TEST
             return todoItems;
         }
 
+        public int GetCount()
+        {
+            return todoItems.Count();
+        }
+
         public IEnumerable<ToDoDataModel> list(Paging paging)
         {
             int Count = todoItems.Count();
